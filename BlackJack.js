@@ -59,8 +59,32 @@ function Hand() {
     
     this.printHand = function() {
         str = '';
-        for(var i = 0; i < cards.length; i++)
-            str += cards[i].getValue() + ' of suit ' + cards[i].getSuit() + ', ';
+        for(var i = 0; i < cards.length; i++) {
+            var s = cards[i].getSuit();
+            var n = cards[i].getNumber();
+            var sStr = '';
+            var nStr = '';
+            
+            switch(s) {
+                case '1': sStr = 'hearts'; break;
+                case '2': sStr = 'diamonds'; break;
+                case '3': sStr = 'spades'; break;
+                case '4': sStr = 'clubs'; break;
+            }
+            
+            if (n > 1 && n < 11)
+                nStr = n;
+            else if (n === 1)
+                nStr = 'Ace';
+            else if (n === 11)
+                nStr = 'Jack';
+            else if (n === 12)
+                nStr = 'Queen';
+            else
+                nStr = 'King';
+            
+            str += nStr + ' of suit ' + sStr + ', ';
+        }
             
         return str.substring(0, str.length - 2);
     };
@@ -124,7 +148,6 @@ function playGame() {
     console.log(result);
     console.log('User: ' + userHand.printHand());
     console.log('Dealer: ' + dealerHand.printHand());
-    
 }
 
 playGame();
