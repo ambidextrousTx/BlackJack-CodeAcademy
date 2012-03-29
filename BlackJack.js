@@ -43,8 +43,9 @@ function Hand() {
         var aces = 0;
         
         for(var i = 0; i < cards.length; ++i) {
-            sc += cards[i].getValue();
-            if (cards[i].getValue() === 11)
+            val = cards[i].getValue();
+            sc += val;
+            if (val === 11)
                 aces++;
         }
         
@@ -52,7 +53,7 @@ function Hand() {
             sc -= 10;
             aces--;
         }
-        
+  
         return sc;
     };
     
@@ -70,7 +71,60 @@ function Hand() {
     };
 }
 
-leHand = new Hand();
-leHand.hitMe();
-console.log(leHand.printHand());
-console.log(leHand.score());
+function playAsDealer() {
+    var dealerHand = new Hand();
+    var dealerScore = dealerHand.score();
+    while(dealerScore < 17) {
+        dealerHand.hitMe();
+        dealerScore = dealerHand.score();
+    }
+    
+    return dealerHand;
+}
+
+function playAsUser() {
+    var playerHand = new Hand();
+    var decision = true;
+    while(decision === true) {
+        decision = confirm('Hand is ' + playerHand.printHand() + '. Hit?');
+        playerHand.hitMe();
+    }
+    
+    return playerHand;
+    
+}
+
+function declareWinner(userHand, dealerHand) {
+    var userScore = userHand.score();
+    var dealerScore = dealerHand.score();
+    if(userScore <= 21 && dealerScore <= 21) {
+        if (userScore < dealerScore)
+            return 'You lose!';
+        else if (userScore > dealerScore)
+            return 'You win!';
+        else
+            return 'You tied!';
+    } else {
+        if (userScore > 21) {
+            if (dealerScore > 21)
+                return 'You tied!';
+            else
+                return 'You lose!';
+        }
+        else if (dealerScore > 21)
+            return 'You win!';
+            
+    }
+}
+
+function playGame() {
+    userHand = playAsUser();
+    dealerHand = playAsDealer();
+    result = declareWinner(userHand, dealerHand);
+    console.log(result);
+    console.log('User: ' + userHand.printHand());
+    console.log('Dealer: ' + dealerHand.printHand());
+    
+}
+
+playGame();
